@@ -5,7 +5,7 @@ import DateTimePicker from 'react-datetime-picker';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import { uiCloseModal } from '../../actions/ui';
-import { eventAddNew, eventClearActiveEvent, eventUpdated } from '../../actions/events';
+import { eventClearActiveEvent, eventStartAddNew, eventStartUpdate } from '../../actions/events';
 
 const customStyles = {
     content: {
@@ -95,17 +95,10 @@ export const CalendarModal = () => {
 
         if ( activeEvent ) {
             // Actualizamos el evento
-            dispatch( eventUpdated(formValues) );
+            dispatch( eventStartUpdate(formValues) );
         } else {
             // Creamos un nuevo Evento
-            dispatch( eventAddNew({
-                ...formValues,
-                id: new Date().getTime(),
-                user: {
-                    _id: '123',
-                    name: 'Johan'
-                }
-            }) );
+            dispatch( eventStartAddNew(formValues) );
         }
 
         setTitleValid(true);
@@ -133,7 +126,7 @@ export const CalendarModal = () => {
                 <label>Start date and time</label>
                 <DateTimePicker 
                     onChange={handleStartDateChange} 
-                    value={ dateStart }
+                    value={ (activeEvent) ? activeEvent.start : dateStart }
                     className="form-control"
                     format="y-MM-dd h:mm:ss a"
                     amPmAriaLabel="Select AM/PM"
@@ -144,7 +137,7 @@ export const CalendarModal = () => {
                 <label>End date and time</label>
                 <DateTimePicker 
                     onChange={handleEndDateChange} 
-                    value={ dateEnd }
+                    value={ (activeEvent) ? activeEvent.end : dateEnd }
                     minDate={ dateStart }
                     className="form-control"
                     format="y-MM-dd h:mm:ss a"
