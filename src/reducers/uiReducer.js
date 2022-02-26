@@ -1,5 +1,4 @@
-import { type } from "@testing-library/user-event/dist/type";
-import { types } from "../types/types";
+import { types } from '../types/types';
 
 const initialState = {
     modalOpen: false,
